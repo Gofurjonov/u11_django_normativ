@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Postni o'chirish</title>
+    <style>
+        body { font-family: Arial; margin: 40px; }
+        .confirm-box { border: 1px solid #ddd; padding: 20px; max-width: 400px; border-radius: 5px; }
+        .btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; color: white; margin-right: 10px; }
+        .btn-delete { background-color: #f44336; }
+        .btn-cancel { background-color: #2196F3; }
+    </style>
+</head>
+<body>
+    <h1>Postni o'chirish</h1>
+    <div class="confirm-box">
+        <p>"{{ post.title }}" postini o'chirishni tasdiqlaysizmi?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-delete">Ha, o'chirish</button>
+            <a href="{% url 'post_list' %}" class="btn btn-cancel">Bekor qilish</a>
+        </form>
+    </div>
+</body>
+</html>

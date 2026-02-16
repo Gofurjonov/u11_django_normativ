@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>O'chirilgan postlar</title>
+    <style>
+        body { font-family: Arial; margin: 40px; }
+        .post { border: 1px solid #ddd; padding: 15px; margin-bottom: 10px; border-radius: 5px; background-color: #f9f9f9; }
+        .btn { padding: 8px 12px; text-decoration: none; color: white; border-radius: 4px; }
+        .btn-restore { background-color: #4CAF50; }
+        btn-hard-delete { background-color: #f44336; }
+        .btn-back { background-color: #2196F3; }
+    </style>
+</head>
+<body>
+    <h1>🗑️ O'chirilgan postlar</h1>
+    <a href="{% url 'post_list' %}" class="btn btn-back">⬅️ Aktiv postlar</a>
+
+    {% for post in posts %}
+    <div class="post">
+        <h3>{{ post.title }}</h3>
+        <p>{{ post.content }}</p>
+        <small>O'chirilgan: {{ post.updated_at }}</small>
+        <div style="margin-top: 10px;">
+            <a href="{% url 'post_restore' post.id %}" class="btn btn-restore">Qayta tiklash</a>
+        </div>
+    </div>
+    {% empty %}
+    <p>O'chirilgan postlar yo'q</p>
+    {% endfor %}
+</body>
+</html>
