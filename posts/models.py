@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 
 class ActivePostManager(models.Manager):
     def get_queryset(self):
@@ -29,3 +29,4 @@ class Post(models.Model):
     def restore(self):
         self.is_deleted = False
         self.save()
+

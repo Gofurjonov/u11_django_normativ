@@ -4,6 +4,7 @@ from .models import Post
 from .forms import PostForm
 from django.core.paginator import Paginator
 from django.db.models import Q
+from accounts.decorators import login_required
 
 def post_list(request):
     posts_list = Post.objects.all()
@@ -30,6 +31,7 @@ def deleted_posts(request):
     posts = Post.all_objects.filter(is_deleted=True)
     return render(request, 'posts/deleted_posts.html', {'posts': posts})
 
+@login_required
 def post_create(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
@@ -43,6 +45,7 @@ def post_create(request):
         'title': 'Yangi post'
     })
 
+@login_required
 def post_update(request, pk):
     post = get_object_or_404(Post.all_objects, pk=pk)
     if request.method == 'POST':
@@ -55,6 +58,7 @@ def post_update(request, pk):
         'title': 'Postni tahrirlash'
     })
 
+@login_required
 def post_delete(request, pk):
     post = get_object_or_404(Post.all_objects, pk=pk)
     if request.method == 'POST':
@@ -62,7 +66,7 @@ def post_delete(request, pk):
         return redirect('post_list')
     return render(request, 'posts/post_confirm_delete.html', {'post': post})
 
-
+@login_required
 def post_restore(request, pk):
     post = get_object_or_404(Post.all_objects, pk=pk, is_deleted=True)
     if request.method == 'POST':
@@ -70,6 +74,7 @@ def post_restore(request, pk):
         return redirect('deleted_posts')
     return render(request, 'posts/post_confirm_restore.html', {'post': post})
 
+@login_required
 def post_hard_delete(request, pk):
     post = get_object_or_404(Post.all_objects, pk=pk)
     if request.method == 'POST':
@@ -78,6 +83,10 @@ def post_hard_delete(request, pk):
         return redirect('deleted_posts')
     return render(request, 'posts/post_confirm_hard_delete.html', {'post': post})
 
+@login_required
 def post_detail(request, pk):
     post = get_object_or_404(Post.all_objects, pk=pk)
     return render(request, 'posts/post_detail.html', {'post': post})
+
+
+
