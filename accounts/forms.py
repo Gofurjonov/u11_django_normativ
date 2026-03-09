@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate
-
+from .models import Profile
 
 class RegisterForm(forms.ModelForm):
 
@@ -111,3 +111,18 @@ class LoginForm(forms.Form):
             cleaned_data['user'] = user
 
         return cleaned_data
+
+
+class ProfileForm(forms.ModelForm):
+    """Profil rasmini tahrirlash formasi"""
+    class Meta:
+        model = Profile
+        fields = ['avatar', 'bio']
+        widgets = {
+            'avatar': forms.FileInput(attrs={'class': 'form-control'}),
+            'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'O\'zingiz haqingizda...'})
+        }
+        labels = {
+            'avatar': 'Profil rasmi',
+            'bio': 'Bio'
+        }

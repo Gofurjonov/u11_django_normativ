@@ -7,7 +7,7 @@ class ActivePostManager(models.Manager):
 
 class Post(models.Model):
     title = models.CharField(max_length=200)
-    content = models.TextField()  # Matn
+    content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_deleted = models.BooleanField(default=False)
