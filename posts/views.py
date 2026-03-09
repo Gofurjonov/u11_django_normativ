@@ -1,10 +1,9 @@
-from django.shortcuts import render,redirect, get_object_or_404
-from .models import Post
-from .forms import PostForm
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required, permission_required
 from django.core.paginator import Paginator
 from django.db.models import Q
-from accounts.decorators import login_required
-from django.contrib.auth.decorators import login_required, permission_required
+from .models import Post
+from .forms import PostForm
 
 def post_list(request):
     posts_list = Post.objects.all()
@@ -20,12 +19,10 @@ def post_list(request):
     page_number = request.GET.get('page', 1)
     posts = paginator.get_page(page_number)
 
-    context = {
+    return render(request, 'posts/post_list.html', {
         'posts': posts,
-        'search_query': search_query,
-    }
-
-    return render(request, 'posts/post_list.html', {'posts': posts, 'search_query': search_query})
+        'search_query': search_query
+    })
 
 def deleted_posts(request):
     posts = Post.all_objects.filter(is_deleted=True)
@@ -35,7 +32,8 @@ def deleted_posts(request):
 @permission_required('posts.add_post', raise_exception=True)
 def post_create(request):
     if request.method == 'POST':
-        form = PostForm(request.POST)
+        # 🟢 MUHIM: request.FILES ni qo'shish kerak!
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
             post.user = request.user
@@ -53,7 +51,8 @@ def post_create(request):
 def post_update(request, pk):
     post = get_object_or_404(Post.all_objects, pk=pk)
     if request.method == 'POST':
-        form = PostForm(request.POST, instance=post)
+        # 🟢 MUHIM: request.FILES ni qo'shish kerak!
+        form = PostForm(request.POST, request.FILES, instance=post)
         if form.is_valid():
             form.save()
             return redirect('post_detail', pk=post.pk)
@@ -90,11 +89,6 @@ def post_hard_delete(request, pk):
         return redirect('deleted_posts')
     return render(request, 'posts/post_confirm_hard_delete.html', {'post': post})
 
-@login_required
-
 def post_detail(request, pk):
     post = get_object_or_404(Post.all_objects, pk=pk)
     return render(request, 'posts/post_detail.html', {'post': post})
-
-
-
