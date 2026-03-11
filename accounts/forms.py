@@ -2,7 +2,89 @@ from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate
-from .models import Profile
+from .models import Profile, PasswordResetCode
+
+
+class ForgotPasswordForm(forms.Form):
+    """Username kiritish formasi"""
+    username = forms.CharField(
+        max_length=150,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Username kiriting'
+        }),
+        label="Foydalanuvchi nomi"
+    )
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if not User.objects.filter(username=username).exists():
+            raise forms.ValidationError("Bunday foydalanuvchi mavjud emas!")
+        return username
+
+
+# 2. RESTORE PASSWORD FORM
+class RestorePasswordForm(forms.Form):
+    """Code va yangi parol kiritish formasi"""
+    code = forms.CharField(
+        max_length=6,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': '6 xonali kod'
+        }),
+        label="Tasdiqlash kodi"
+    )
+
+    new_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Yangi parol'
+        }),
+        label="Yangi parol"
+    )
+
+    confirm_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Parolni tasdiqlang'
+        }),
+        label="Parolni tasdiqlang"
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+    def clean_code(self):
+        code = self.cleaned_data.get('code')
+
+        if not self.user:
+            raise forms.ValidationError("Foydalanuvchi topilmadi!")
+
+        try:
+            reset_code = PasswordResetCode.objects.filter(
+                user=self.user,
+                code=code,
+                is_used=False
+            ).latest('created_at')
+        except PasswordResetCode.DoesNotExist:
+            raise forms.ValidationError("Noto'g'ri kod!")
+
+        if not reset_code.is_valid():
+            raise forms.ValidationError("Kod eskirgan! Yangi kod so'rang.")
+
+        return code
+
+    def clean(self):
+        cleaned_data = super().clean()
+        new_pass = cleaned_data.get('new_password')
+        confirm_pass = cleaned_data.get('confirm_password')
+
+        if new_pass and confirm_pass and new_pass != confirm_pass:
+            raise forms.ValidationError("Parollar bir-biriga mos kelmadi!")
+
+        return cleaned_data
+
 
 class RegisterForm(forms.ModelForm):
 
