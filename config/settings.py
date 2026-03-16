@@ -5,7 +5,6 @@ import environ
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 env = environ.Env(
     # Casting (DEBUG qiymatini True/False ga aylantirish)
     DEBUG=(bool, False)
@@ -48,6 +47,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'accounts.middleware.UserAgentLogger',
+    'accounts.middleware.TimeRestriction',
+    'accounts.middleware.RequestLoggerMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -106,7 +109,7 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
-
+USE_L10N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
@@ -114,11 +117,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-    
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
@@ -126,5 +126,3 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "gafurjonovdavronbek@gmail.com"
 EMAIL_HOST_PASSWORD = "jxfnabxnjpksgexq"
-
-
