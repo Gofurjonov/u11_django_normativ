@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 import environ
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,6 +32,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+
+    # Allauth apps
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 
     'books',
     'posts',
@@ -42,16 +50,59 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+    #  Allauth middleware
+    'allauth.account.middleware.AccountMiddleware',
+
     'accounts.middleware.UserAgentLogger',
     'accounts.middleware.TimeRestriction',
     'accounts.middleware.RequestLoggerMiddleware',
 ]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Standart login
+    'allauth.account.auth_backends.AuthenticationBackend',  # Allauth login
+]
+
+# Site ID (allauth uchun kerak)
+SITE_ID = 1
+
+# Login redirect sozlamalari
+LOGIN_REDIRECT_URL = '/'  # Login bo'lgandan keyin qayerga ketish
+LOGOUT_REDIRECT_URL = '/'  # Logout bo'lgandan keyin qayerga ketish
+
+# Allauth sozlamalari
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
+ACCOUNT_LOGOUT_ON_GET = True  # Logout uchun POST talab qilmaydi
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': 'your-client-id.apps.googleusercontent.com',  # Google Cloud dan olasiz
+            'secret': 'your-client-secret',  # Google Cloud dan olasiz
+            'key': ''
+        },
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        },
+        'OAUTH_PKCE_ENABLED': True,
+    }
+}
+
+
 
 ROOT_URLCONF = 'config.urls'
 
@@ -104,13 +155,23 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
+
+LANGUAGES = [
+    ('en', _('English')),
+    ('uz', _('Uzbek')),
+    ('ru', _('Russian')),
+]
 
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/

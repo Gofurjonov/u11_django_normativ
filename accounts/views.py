@@ -7,7 +7,18 @@ from .models import Profile
 from .forms import ProfileForm
 from django.contrib.auth.models import Group
 from .common.email import send_password_reset_email, send_welcome_email
+from django.utils.translation import gettext as _
 
+
+def my_view(request):
+    title = _("Bosh sahifa")
+    message = _("Xush kelibsiz!")
+
+    context = {
+        'title': title,
+        'message': message,
+    }
+    return render(request, 'index.html', context)
 
 def register_view(request):
     if request.method == 'POST':

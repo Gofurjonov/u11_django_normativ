@@ -1,0 +1,81 @@
+# Yangi qo'shilgan tarjimalar
+msgid "Deleted"
+msgstr "O'chirilganlar"
+
+msgid "Search..."
+msgstr "Qidirish..."
+
+msgid "Search"
+msgstr "Qidirish"
+
+msgid "ago"
+msgstr "oldin"
+
+msgid "No notifications"
+msgstr "Bildirishnoma yo'q"
+
+msgid "Mark all as read"
+msgstr "Hammasini o'qilgan deb belgilash"
+
+msgid "Profile"
+msgstr "Profil"
+
+msgid "Logout"
+msgstr "Chiqish"
+
+msgid "Login"
+msgstr "Kirish"
+
+msgid "Register"
+msgstr "Ro'yxatdan o'tish"
+
+msgid "Posts"
+msgstr "Postlar"
+
+msgid "New Post"
+msgstr "Yangi post"
+
+msgid "Image"
+msgstr "Rasm"
+
+msgid "Content"
+msgstr "Matn"
+
+msgid "Created"
+msgstr "Yaratilgan"
+
+msgid "View"
+msgstr "Ko'rish"
+
+msgid "Edit"
+msgstr "Tahrirlash"
+
+msgid "Delete"
+msgstr "O'chirish"
+
+msgid "No posts found"
+msgstr "Hech qanday post topilmadi"
+
+msgid "No results found"
+msgstr "natija topilmadi"
+
+msgid "Total"
+msgstr "Jami"
+
+msgid "posts"
+msgstr "ta post"
+
+msgid "Page navigation"
+msgstr "Sahifalash"
+
+msgid "First"
+msgstr "Birinchi"
+
+msgid "Previous"
+msgstr "Orqaga"
+
+msgid "Next"
+msgstr "Keyingi"
+
+msgid "Last"
+msgstr "Oxirgi"
